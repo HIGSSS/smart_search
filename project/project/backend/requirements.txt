@@ -1,0 +1,44 @@
+# --- Веб-фреймворк ---
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.27,<1.0
+pydantic>=2.5,<3.0
+python-multipart>=0.0.9,<1.0
+
+# --- ML: энкодеры и инференс ---
+# torch подхватывает CUDA автоматически, если она доступна (см. models._detect_device);
+# на машинах без GPU отрабатывает тот же пакет на CPU. Чтобы поставить версию
+# под конкретный CUDA-тулкит — ставьте torch вручную ДО requirements.txt
+# (см. https://pytorch.org/get-started/locally/), pip не станет её перезаписывать.
+torch>=2.2,<3.0
+transformers>=4.40,<5.0
+sentence-transformers>=2.7,<4.0
+# Нужен SiglipTokenizer внутри AutoProcessor.from_pretrained(SIGLIP_MODEL).
+sentencepiece>=0.2,<1.0
+
+# --- OCR ---
+# EasyOCR вместо PaddleOCR: работает поверх PyTorch (тот же бэкенд, что
+# у SigLIP/SBERT) — нет конфликта oneDNN между PaddlePaddle и PyTorch
+# и не тянет отдельный тяжёлый ML-фреймворк.
+easyocr>=1.7,<2.0
+
+# --- Перевод запросов для медиа-поиска (ru → en для SigLIP) ---
+# Опционально: без этих пакетов get_translator() возвращает None и поиск
+# фото просто работает на исходном языке запроса.
+sacremoses>=0.1,<1.0
+
+# --- Векторный индекс ---
+# faiss-cpu достаточно для Flat-индексов на десятках тысяч векторов.
+faiss-cpu>=1.8,<2.0
+
+# --- Обработчики файлов ---
+Pillow>=10.0,<12.0
+# PyMuPDF не требует системного poppler, извлекает текст и рендерит страницы
+# для OCR в рамках одной зависимости.
+PyMuPDF>=1.23,<2.0
+python-docx>=1.1,<2.0
+pandas>=2.0,<3.0
+openpyxl>=3.1,<4.0
+opencv-python>=4.8,<5.0
+
+# --- numpy: закрепляем верхнюю границу для совместимости с opencv/faiss ---
+numpy>=1.24,<2.1
